@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import Blog from './components/Blog'
 import Notification from './components/Notification'
 import Footer from './components/Footer'
 import blogService from './services/blogs'
+import Blog from './components/Blog'
 import loginService from './services/login'
 import Togglable from './components/Togglable'
 import BlogForm from './components/BlogForm'
@@ -124,6 +124,18 @@ const App = () => {
     </form>      
   )
 
+  const updateBlogLikes = (updatedBlog) => {
+    setBlogs(blogs.map(blog => (blog.id === updatedBlog.id ? updatedBlog : blog)))
+  }
+
+  const deleteBlog = id => {
+    setBlogs(blogs.filter(blog => blog.id !== id))
+  }
+
+  function compareLikes(a, b) {
+    return b.likes - a.likes
+  }
+
   return (
     <div>
       <Notification message={errorMessage} />
@@ -135,12 +147,18 @@ const App = () => {
         {logoutForm()}
         <Togglable buttonLabel="create">
         <BlogForm
-          createBlog={addBlog}
+          createBlog={addBlog} user={user.name}
         />
         </Togglable>
-        {blogs.map(blog =>
-          <Blog key={blog.id} blog={blog} />
-        )}
+        {blogs.sort(compareLikes).map(blog => (
+            <Blog
+            key={blog.id}
+            blog={blog}
+            updateBlogLikes={updateBlogLikes}
+            deleteBlog={deleteBlog}
+            currentUser={user}
+          />
+        ))}
       </div>
     } 
     </div>
