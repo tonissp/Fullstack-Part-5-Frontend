@@ -30,22 +30,22 @@ const App = () => {
   useEffect(() => {
     blogService.getAll().then(blogs =>
       setBlogs( blogs )
-    )  
+    )
   }, [])
 
   const addBlog = (blogObject) => {
     blogService
-    .create(blogObject)
-    .then(returnedBlog => {
-      setBlogs(blogs.concat(returnedBlog))
-    })
+      .create(blogObject)
+      .then(returnedBlog => {
+        setBlogs(blogs.concat(returnedBlog))
+      })
 
     if (!blogObject.title || !blogObject.url) {
       setErrorMessage('The blog is missing necessary information')
       setTimeout(() => {
         setErrorMessage(null)
       }, 5000)
-      return;
+      return
     }
 
     setErrorMessage(`A new blog '${blogObject.title}' successfully added`)
@@ -104,7 +104,7 @@ const App = () => {
     <form onSubmit={handleLogin}>
       <div>
         username
-          <input
+        <input
           type="text"
           value={username}
           name="Username"
@@ -113,7 +113,7 @@ const App = () => {
       </div>
       <div>
         password
-          <input
+        <input
           type="password"
           value={password}
           name="Password"
@@ -121,7 +121,7 @@ const App = () => {
         />
       </div>
       <button type="submit">login</button>
-    </form>      
+    </form>
   )
 
   const updateBlogLikes = (updatedBlog) => {
@@ -146,12 +146,12 @@ const App = () => {
         <p>{user.name} logged in</p>
         {logoutForm()}
         <Togglable buttonLabel="create">
-        <BlogForm
-          createBlog={addBlog} user={user.name}
-        />
+          <BlogForm
+            createBlog={addBlog} user={user.name}
+          />
         </Togglable>
         {blogs.sort(compareLikes).map(blog => (
-            <Blog
+          <Blog
             key={blog.id}
             blog={blog}
             updateBlogLikes={updateBlogLikes}
@@ -160,7 +160,7 @@ const App = () => {
           />
         ))}
       </div>
-    } 
+      }
     </div>
   )
 }
